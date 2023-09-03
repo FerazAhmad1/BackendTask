@@ -24,6 +24,7 @@ const routes = (req, res) => {
     return req.on("end", () => {
       const parsebody = Buffer.concat(body).toString();
       const message = parsebody.split("=")[1];
+
       console.log("parseBody", parsebody);
       fs.writeFile("./message.text", message, (err) => {
         res.statusCode = 302;
