@@ -1,6 +1,7 @@
 const http = require("http");
 const express = require("express");
 const bodyParser = require("body-parser");
+const adminRouter = require("./routes/admin");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.get("/", (req, res, next) => {
@@ -8,16 +9,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //   res.send("<h1>Hello from app.js</h1>");
 //   return;
 // });
-app.post("/add-product", (req, res) => {
-  console.log(req.body, "12222222222222222222");
-  // res.json(req.body);
-  res.end();
-  return;
-});
-app.get("/", (req, res) => {
-  res.send(
-    '<form action = "/add-product" method = "POST" ><input type = "text" name="product" ><button type = "submit" >send</button></form>'
-  );
+app.use(adminRouter);
+app.use((req, res) => {
+  res.status(404).send("Page not Found");
   return;
 });
 const port = 4000;
