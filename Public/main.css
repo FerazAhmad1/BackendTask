@@ -1,0 +1,12 @@
+.notFound{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    background-color: rgb(77, 250, 250);
+  }
+  .formPage {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+  }

@@ -1,4 +1,5 @@
 const http = require("http");
+const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
 const adminRouter = require("./routes/admin");
@@ -9,12 +10,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //   res.send("<h1>Hello from app.js</h1>");
 //   return;
 // });
-app.use(adminRouter);
+app.use(cors());
+app.use(express.static(`${__dirname}/Public`));
+app.use("/admin", adminRouter);
 app.use((req, res) => {
-  res.status(404).send("Page not Found");
+  res.status(404).sendFile(`${__dirname}/views/404page.html`);
   return;
 });
-const port = 4000;
+const port = 3000;
 app.listen(port, () => {
   console.log(`server running on port ${port}`);
 });
