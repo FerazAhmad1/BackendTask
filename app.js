@@ -5,6 +5,9 @@ const bodyParser = require("body-parser");
 const adminRouter = require("./routes/admin");
 const sequelize = require("./utils/database");
 const { Product } = require("./models/productModel");
+const { User } = require("./models/userModel");
+const { Cart } = require("./models/cartModel");
+const { CartItem } = require("./models/cartItemModel");
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -23,14 +26,29 @@ app.use((req, res) => {
   return;
 });
 
-Product.sync()
-  .then((result) => {
-    const port = 3000;
-    app.listen(port, () => {
-      console.log(`server running on port ${port}`);
-    });
-    console.log("rrrrrrrrrrrrrrrrrr", result);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+//  Product.sync()
+//   .then((result) => {
+//     const port = 3000;
+//     app.listen(port, () => {
+//       console.log(`server running on port ${port}`);
+//     });
+//     console.log("rrrrrrrrrrrrrrrrrr", result);
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Product.belongsToMany(Cart, { through: CartItem });
+Cart.belongsToMany(Product, { through: CartItem });
+(async function tableCreator() {
+  await sequelize.sync({ force: true });
+})();
+
+const port = 3000;
+app.listen(port, () => {
+  console.log(`server running on port ${port}`);
+});
